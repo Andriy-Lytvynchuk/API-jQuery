@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- FB SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0" nonce="XdSNIG2W"></script>
+ 
+<header>
+    <img id="sky-img" class="anim-sky" src="img/header.jpeg" alt="sky image">
+    <h2>Find your favorite movies!
+        <button id="sky-anim-btn">Stop animation</button>   
+    </h2>
+ </header>   
+
+ <!-- MAIN ---------- -->
+<div class="main-cont">
+
+    <!-- SEARCH FORM -->
+    <div class="search-div">
+        <label for="search_input">Movie: </label>  
+        <input type="text" placeholder="Movie Title" id="search_input">  
+        <label for="max-number">Results:  </label>        
+        <input type="text" placeholder="10" id="max-number">
+        <button type="text" id="search_btn">Search</button> 
+       
+        <!-- FB buttons -->
+        <div id="fb-btn">
+            <div class="fb-like" data-href="https://webelf.ca/movies" data-width="" data-layout="button" data-action="like" data-size="small" data-share="true"></div>
+        </div>
+        <br />
+        <span id="noInput" class= "red"></span>
+    </div>
+
+<!-- SEARCH RESULTS -->
+    <div class="search-cont">
+        <div class="results">  
+            <h3 id="resultsH3">Search Results </h3>   
+            <noscript>This ain't gonna work without Java Script</noscript>  
+            <p id="descrip">Enter a keyword for a movie title in the search box above. Once the search results appear in the below section, click the "Nominate" button next to the movie title to nominate up to 5 of your favorite movies!
+            </p>  
+            <span id="nodata" class= "red"></span>
+            <img src="img/loader-spin.gif" id="load-img" alt="Loading...">                   
+            <div id="search-list"></div>  
+        </div>
+
+        <div class="nominations">
+            <h3>Nominations</h3>
+            <ul id="nominats-list"></ul> 
+
+            <div id="congrats">
+                <p>Congrats! </p>
+                <p>You've nomintaed 5 movies!</p>
+                <img src="img/crown.png" alt="crown image">
+            </div>
+        </div>
+    </div>  
+   
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>
