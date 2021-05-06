@@ -87,13 +87,16 @@ SEARCH BAR ---  */
 #fb-btn {
     display: inline-block;
     position: relative;
-    top:7px; left: 40px;
+    top:7px; left: 2.5em;
+    min-width: 7em;
   }
+#gitlink{
+    display: inline-block;
+    margin-left: 4em;
+}
 
-.main-cont{
- /* border: 1px solid navy; */
-} 
 .search-cont{
+    margin-top: 0.5em;
    display: flex;
    flex-flow: row nowrap;
    justify-content: space-between;
@@ -142,7 +145,6 @@ SEARCH BAR ---  */
 
 .results, .nominations {
    border: 1px solid rgb(211, 209, 209);
-   margin-top: 20px;
    min-width: 28%;
    padding: 6px;
    background-color:white;
