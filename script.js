@@ -18,18 +18,6 @@ $("#sky-anim-btn").click(function(){
     }
 }); 
 
-    //     $("#sky-img").css("animation-play-state", "paused");
-    // }, function(){
-    //     $("#sky-img").css("animation-play-state", "running");   
-    // });
-
-    // if ($("#sky-img").css("animation")=="rotate 800s linear infinite forwards") {   
-    //     $("#sky-img").css("animation", "none") ;
-    // } 
-    //  else  {
-    //     $("#sky-img").css("animation", "rotate 800s linear infinite forwards");
-    //  }
-
 
 //Search button listener -------------
 $("#search_btn").click(function(){
