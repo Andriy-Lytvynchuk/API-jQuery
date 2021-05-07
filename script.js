@@ -18,17 +18,28 @@ $("#sky-anim-btn").click(function(){
     }
 }); 
 
+//Find Array index by object property value
+function findIndexByKeyValue(array, key, value) {
+    for (var i = 0; i < array.length; i++) { 
+        if (array[i][key] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
 
-//Search button listener -------------
+// ========================================================
+//Search button listener 
 $("#search_btn").click(function(){
     
     if ($("#search_input").val()==="") {
         $("#noInput").html("Please enter Movie Title");
+        $("#noData").html("");
     } else {
-        $("#descrip").hide();
         $("#load-img").css("display", "block");
+        $("#descrip").hide();
         $("#noInput").html("");
-        $("#nodata").html("");
+        $("#noData").html("");
         searchTitle = $("#search_input").val(); 
         searchURL = encodeURIComponent(searchTitle).toLowerCase();  
 
@@ -42,56 +53,75 @@ $("#search_btn").click(function(){
     }
     }); 
 
-//Fetsh remote data ---------------------
+//Fetsh remote data ================================
 function getData(){
-    $.getJSON(API + searchURL, function(data) {
-    //   console.log(data);  
+ $.getJSON(API+searchURL, function() {
+    
       $("#resultsH3 > span").empty();
       $("#resultsH3").append(`<span> for "${searchTitle}" </span>` ); 
       $("#search-list").empty();
-      searchResAr =[];
-    
-      //Print from searchResAr ----
-       $.each(data.Search, function(index, movie){  
-            movie.Id = index;
-            searchResAr.push(movie);   
-
-            $("#search-list").append(`
-                <div class="movie-cont blue-box-shadow">                   
-                    <h4>${searchResAr[index].Title} (${searchResAr[index].Year})
-                    <button id="${searchResAr[index].Id}" class="nominate-btn">Nominate</button></h4>    
-                    <img src="${searchResAr[index].Poster}" alt="movie poster">          
-                </div>                
-            `) ;
-
-            //Print from JSON ------
-            // $("#search-list").append(`
-            //     <li class="cont-flex">${index+1}. ${movie.Title} (${movie.Year}) 
-            //         <button id="${index}" class="nominate-btn">Nominate</button>
-            //     </li>                 
-            // `) ;
-
-            if ( index == maxNumRes ) {
-                return false;
-            }        
-       }); // closing each loop
-    //    console.log(searchResAr);
-    $("#load-img").css("display", "none");
+      searchResAr =[]; //empty array
     }) // closing getJSON
-    .fail(function() { $("#nodata").html("Could not load remote data") ; })
+     
+    .done(function(data) {
+       //console.log(data);  
+      //Print from searchResAr ----
+      $.each(data.Search, function(index, movie){  
+        // movie.Id = index;
+        searchResAr.push(movie);   
+      
+        //Nominate button id attr set to movie id in database (imdbID)
+        $("#search-list").append(`
+            <div class="movie-cont blue-box-shadow">                   
+                <h4>${searchResAr[index].Title} (${searchResAr[index].Year})
+                <button id="${searchResAr[index].imdbID}" class="nominate-btn">Nominate</button></h4>    
+                <img src="${searchResAr[index].Poster}" alt="movie poster">          
+            </div>                
+        `) ;
+
+        //Print from JSON ------
+        // $("#search-list").append(`
+        //     <li class="cont-flex">${index+1}. ${movie.Title} (${movie.Year}) 
+        //         <button id="${index}" class="nominate-btn">Nominate</button>
+        //     </li>                 
+        // `) ;
+
+        if ( index == maxNumRes ) {
+            return false;
+        }        
+        }); // closing each loop
+            //  console.log(searchResAr);
+        $("#load-img").css("display", "none");
+
+        if(searchResAr.length == 0){
+            $("#noData").html("Did not find a match");
+        }
+    }) //closing .done 
+
+    .fail(function() { $("#noData").html("Could not load remote data") ; }); 
 }
 
-//"Nominate" button listener ---------------
+// ========================================================
+//"Nominate" button listener (Search results div on the left) 
 $("#search-list").on("click", ".nominate-btn", function (){
     // $(this).css("background-color", "yellow");
-    var nominBtnId = $(this).attr("id");
-    
-    nominatedAr.push(searchResAr[nominBtnId]); 
 
+    //Find in searchResAr movie to add to nominatedAr
+    var movieDBid = $(this).attr("id");
+    var ResArMovieIndex = findIndexByKeyValue(searchResAr, "imdbID", movieDBid);
+    console.log("Search div movieDBid: "+ movieDBid); 
+    console.log("ResArMovieIndex: "+ ResArMovieIndex);
+
+    //Add movie to nominatedAr
+    if (ResArMovieIndex >= 0) {
+        nominatedAr.push(searchResAr[ResArMovieIndex]); 
+    }   
+
+    //Check number of elements in nominatedAr
     if (nominatedAr.length <= 5) {
         $(this).parents(".movie-cont").removeClass("blue-box-shadow").addClass("red-box-shadow");
         $(this).addClass("inactive-btn");
-        $(".nominate-btn[id="+nominBtnId+"]").prop('disabled', true);              
+        $(".nominate-btn[id="+movieDBid+"]").prop('disabled', true);              
         printNominatedAr();              
      }
     if (nominatedAr.length == 5){
@@ -108,13 +138,14 @@ $("#search-list").on("click", ".nominate-btn", function (){
 
     console.log("nominatedAr.length: "+nominatedAr.length);
     
-    //  console.log("nominBtnId: "+ nominBtnId); 
     // console.log("nominatedAr Entire: \n"+ JSON.stringify(nominatedAr) );   
-    // console.log("searchResAr at Nominat ID: \n"+ JSON.stringify(searchResAr[nominBtnId]));  
+    // console.log("searchResAr at Nominat ID: \n"+ JSON.stringify(searchResAr[movieDBid]));  
     // console.log("searchResAr Entire: \n"+ JSON.stringify(searchResAr));  
 }); //closing "Nominate" button listener
 
-//print Nominated Array ------------------
+// ========================================================
+//print Nominated Array
+// button "id" attr set to movie DB id (imdbID)
 function printNominatedAr(){
     $("#nominats-list").empty();
     if (nominatedAr.length > 0) {
@@ -122,80 +153,61 @@ function printNominatedAr(){
             $("#nominats-list").append(`
             <li class="nominats-list-item">
                 <span>${index+1}. ${nominatedAr[index].Title} (${nominatedAr[index].Year}) </span>
-                <button id="${nominatedAr[index].Id}" class="remove-btn">Remove</button>
+                <button id="${nominatedAr[index].imdbID}" class="remove-btn">Remove</button>
             </li>  
             <hr>               
             `);
         }); //closing each loop
-    }
-   
+    }  
 } 
 
-//"Remove" button listener ---------------
+// ========================================================
+//"Remove" button listener (Nominations div on the right) 
 $("#nominats-list").on("click", ".remove-btn", function (){
-
-    var removeBtnId = $(this).attr("id");
-    var movieBorder = $(".nominate-btn[id="+removeBtnId+"]").parents(".movie-cont");
-
     $("#congrats").css("display", "none");
 
-      $('html, body').animate({
-        scrollTop: movieBorder.offset().top-14 
-    }, 300);
+    var movieDBid = $(this).attr("id");
+    var NominArMovieIndex = findIndexByKeyValue(nominatedAr, "imdbID", movieDBid);
+    console.log("Nominations div movieDBid: "+ movieDBid); 
+    console.log("NominArMovieIndex: "+ NominArMovieIndex);
 
-    // $(".nominate-btn[id="+removeBtnId+"]")[0].scrollIntoView({
-    //     behavior: "smooth",  block: "start"
-    // });
-
-    $(".nominate-btn[id="+removeBtnId+"]").removeClass("inactive-btn");
-
-    // Blink removed movie border
-    movieBorder.removeClass("red-box-shadow");
-
-     var changeBordColor = ( setInterval(function (){
-        movieBorder.toggleClass("red-box-shadow")}, 300));
-    
-    setTimeout(function(){
-        clearInterval(changeBordColor);
-        movieBorder.removeClass("red-box-shadow").addClass("blue-box-shadow");
-    }, 2100);
- 
-    // var index = nominatedAr.findIndex(function (movie, index) {
-    //      if(movie.Id == removeBtnId)  
-    //      return true  
-    // });  
-
-    var index;
-    nominatedAr.some(function (elem, i) {
-        return elem.Id == removeBtnId ? (index = i, true) : false;
-    });
-
-    // alternative to above:
-/*     function findIndexByKeyValue(array, key, value) {
-        for (var i = 0; i < array.length; i++) { 
-            if (array[i][key] == value) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    var index = findIndexByKeyValue(a, 'Id', removeBtnId);
-    console.log(index);
- */    
-
-
-    // console.log("index: " + index);
-    // console.log("nominatedAr: \n" + JSON.stringify(nominatedAr));
-
-    nominatedAr.splice(index, 1);
-    $(".nominate-btn[id="+removeBtnId+"]").prop('disabled', false);
-
+    //Remove movie from nominatedAr and re-print list
+    nominatedAr.splice(NominArMovieIndex, 1);
     printNominatedAr();
 
+    // ----------------------------------------
+    //Style Search results div on the left (id="search-list") 
+    var SearchArMovieIndex = findIndexByKeyValue(searchResAr, "imdbID", movieDBid);
+    if(SearchArMovieIndex >= 0) {
+        var movieBorder = $(".nominate-btn[id="+movieDBid+"]").parents(".movie-cont");
+        $('html, body').animate({
+            scrollTop: movieBorder.offset().top-14 
+        }, 300);
+
+        // $(".nominate-btn[id="+movieDBid+"]")[0].scrollIntoView({
+        //     behavior: "smooth",  block: "start"
+        // });
+
+        $(".nominate-btn[id="+movieDBid+"]").removeClass("inactive-btn");
+        $(".nominate-btn[id="+movieDBid+"]").prop('disabled', false);
+
+        // Blink removed movie border
+        movieBorder.removeClass("red-box-shadow");
+
+        var changeBordColor = ( setInterval(function (){
+            movieBorder.toggleClass("red-box-shadow")}, 300));
+        
+        setTimeout(function(){
+            clearInterval(changeBordColor);
+            movieBorder.removeClass("red-box-shadow").addClass("blue-box-shadow");
+        }, 2100);
+    } //closing if 
+
+
     console.log("nominatedAr.length: "+nominatedAr.length);
-    // console.log("removeBtnId: "+ removeBtnId); 
+    // console.log("movieDBid: "+ movieDBid); 
     // console.log("nominatedAr Entire: \n"+ JSON.stringify(nominatedAr) );   
-    // console.log("searchResAr at Nominat ID: \n"+ JSON.stringify(searchResAr[nominBtnId]));  
+    // console.log("searchResAr at Nominat ID: \n"+ JSON.stringify(searchResAr[movieDBid]));  
     // console.log("searchResAr Entire: \n"+ JSON.stringify(searchResAr));  
 }); //closing "Nominate" button listener
     

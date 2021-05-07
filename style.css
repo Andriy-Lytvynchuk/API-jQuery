@@ -24,8 +24,8 @@ hr{
     margin-inline-start: 0;
 }
 #noInput{
-    font-size: 0.8em;
-    margin-left: 4em;
+    font-size: 0.9em;
+    margin-left: 3.7em;
 }
 
 /* LAYOUT Containers, Divs ----------------*/
@@ -159,10 +159,12 @@ max-width: 68%;
     margin:10px auto;
     /* width: 150px; */
 }
-#nodata{
+#noData{
     /* color: #d31b6b; */
-    margin-left: 35%;
-    font-size: 1.1em;;
+    margin: 0 auto;
+    font-size: 1.1em;
+    max-width: 50%;
+    text-align: center;
 }
 .nominations{
     flex: 28%;    
