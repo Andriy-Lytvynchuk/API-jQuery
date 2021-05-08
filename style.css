@@ -77,6 +77,9 @@ header h2{
  
 /* MAIN CCONTENT ---------------
 SEARCH BAR ---  */
+form{
+    display: inline-block;
+}
 .search-div input{
     margin-left: 4px;
     margin-right: 10px;

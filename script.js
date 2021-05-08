@@ -30,7 +30,8 @@ function findIndexByKeyValue(array, key, value) {
 
 // ========================================================
 //Search button listener 
-$("#search_btn").click(function(){
+$("#search_btn").click(function(e){
+    e.preventDefault();
     
     if ($("#search_input").val()==="") {
         $("#noInput").html("Please enter Movie Title");

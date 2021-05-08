@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Movies</title>
    <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,18 +14,20 @@
 <header>
     <img id="sky-img" class="anim-sky" src="img/header.jpeg" alt="sky image">
     <h2>Find your favorite movies!
-        <button id="sky-anim-btn">Stop animation</button>   
+        <button type="button" id="sky-anim-btn">Stop animation</button>   
     </h2>
  </header>   
 
  <!-- SEARCH FORM -->
     <div class="search-div">
-        <label for="search_input">Movie: </label>  
-        <input type="text" placeholder="Movie Title" id="search_input">  
-        <label for="max-number">Results:  </label>        
-        <input type="text" placeholder="10" id="max-number">
-        <button type="text" id="search_btn">Search</button> 
-       
+        <form>
+            <label for="search_input">Movie: </label>  
+            <input type="text" placeholder="Movie Title" id="search_input">  
+            <label for="max-number">Results:  </label>        
+            <input type="text" placeholder="10" id="max-number">
+            <button type="button" id="search_btn">Search</button> 
+        </form>
+
         <!-- FB buttons -->
         <div id="fb-btn">
             <div class="fb-like" data-href="https://webelf.ca/movies" data-width="" data-layout="button" data-action="like" data-size="small" data-share="true"></div>
