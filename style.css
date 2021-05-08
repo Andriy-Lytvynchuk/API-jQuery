@@ -169,6 +169,8 @@ max-width: 68%;
 .nominations{
     flex: 28%;    
     position: -webkit-sticky; /* Safari */
+    position: -moz-sticky; /* Firefox */
+    position: -ms-sticky; /* IE */
     position: sticky;
     top: 0;
     max-width: 28%;

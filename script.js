@@ -98,7 +98,10 @@ function getData(){
         }
     }) //closing .done 
 
-    .fail(function() { $("#noData").html("Could not load remote data") ; }); 
+    .fail(function() { 
+        $("#noData").html("Could not load remote data") ;
+         $("#load-img").css("display", "none");
+}); 
 }
 
 // ========================================================
